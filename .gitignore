@@ -1,0 +1,16 @@
+freshResourceCenter/src/main/webapp/Thumbs.db
+freshResourceCenter/src/main/webapp/WEB-INF/classes
+freshResourceCenter/src/main/webapp/WEB-INF/lib
+freshResourceCenter/src/main/webapp/css/*.db
+freshServicesFacade/src/META-INF
+.settings
+.springBeans
+.springWebflow
+.metadata
+.project
+.classpath
+target
+.DS_Store
+.metadata
+*.log
+.springBeans
