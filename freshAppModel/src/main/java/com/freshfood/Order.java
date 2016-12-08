@@ -1,35 +1,33 @@
 package com.freshfood;
 
 import java.io.Serializable;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class Order implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Product product;
-	private int quantity;
-	
-	
-	public Product getProduct() {
-		return product;
+	Map<Product,Integer>  products;
+
+	public Map<Product, Integer> getProducts() {
+		return products;
 	}
-	
-	public void setProduct(Product product) {
-		this.product = product;
+
+	public void setProducts(Map<Product, Integer> products) {
+		this.products = products;
 	}
-	
-	public int getQuantity() {
-		return quantity;
-	}
-	
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-	
+
 	@Override
 	public String toString() {
-		return "Order [product=" + product + ", quantity=" + quantity + "]";
+		String order = "";
+		for (Entry<Product, Integer> entry : products.entrySet())
+		{
+			order+=entry.getKey().getName() + "-" + entry.getValue().intValue();
+		}
+		return order;
 	}
 	
+		
 }
 

@@ -10,10 +10,6 @@ public class Subcategory implements Serializable {
 	private String name;
 	private List<Product> products;
 	
-	public Subcategory() {
-		
-	}
-
 	public String getName() {
 		return name;
 	}

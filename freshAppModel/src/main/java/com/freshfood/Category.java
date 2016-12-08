@@ -9,10 +9,6 @@ public class Category implements Serializable {
 	
 	private String name;
 	private List<Subcategory> subcategories;
-
-	public Category() {
-		
-	}
 	
 	@Override
 	public String toString() {

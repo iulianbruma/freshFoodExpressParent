@@ -11,7 +11,7 @@ public class Reservation implements Serializable {
 	private User owner;
 	private int numberOfPeople;
 	private Date dateTime;
-	private List<Order> order;
+	private Order order;
 	
 	public User getOwner() {
 		return owner;
@@ -36,11 +36,11 @@ public class Reservation implements Serializable {
 		this.dateTime = dateTime;
 	}
 	
-	public List<Order> getOrder() {
+	public Order getOrder() {
 		return order;
 	}
 
-	public void setOrder(List<Order> order) {
+	public void setOrder(Order order) {
 		this.order = order;
 	}
 	
