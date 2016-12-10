@@ -1,6 +1,7 @@
 package com.freshfood;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -10,6 +11,14 @@ public class Order implements Serializable {
 	
 	Map<Product,Integer>  products;
 
+	public Order() {
+		products = new HashMap<Product,Integer>();
+	}
+	
+	public void addProduct(Product p,int quantity) {
+		products.put(p, quantity);
+	}
+	
 	public Map<Product, Integer> getProducts() {
 		return products;
 	}
