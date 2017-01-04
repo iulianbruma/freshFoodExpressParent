@@ -10,11 +10,6 @@ public class Category implements Serializable {
 	private String name;
 	private List<Subcategory> subcategories;
 	
-	@Override
-	public String toString() {
-		return "Category [name=" + name + "]";
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -23,5 +18,17 @@ public class Category implements Serializable {
 		this.name = name;
 	}
 	
+	public List<Subcategory> getSubcategories() {
+		return subcategories;
+	}
+
+	public void setSubcategories(List<Subcategory> subcategories) {
+		this.subcategories = subcategories;
+	}
+	
+	@Override
+	public String toString() {
+		return "Category [name=" + name + "]";
+	}
 
 }
