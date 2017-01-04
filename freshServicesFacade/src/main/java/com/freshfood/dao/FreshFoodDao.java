@@ -10,7 +10,9 @@ import java.util.Properties;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+import com.freshfood.Product;
 import com.freshfood.User;
+import com.freshfood.dao.extractor.ProductResultSet;
 import com.freshfood.dao.extractor.UserResultSet;
 
 public class FreshFoodDao {
@@ -42,6 +44,29 @@ public class FreshFoodDao {
 			} else {
 				usersList = new ArrayList<User>(usersMap.values());
 				return usersList;
+			}
+			
+		} catch(DataAccessException e) {
+			throw e;
+		}
+	}
+	
+	public List<Product> getProducts() {
+		String sql = prop.getProperty("getProducts");
+		List<Product> productsList;
+		
+		Map<String, Product> productsMap = new HashMap<>();
+		
+		ProductResultSet resultSet = new ProductResultSet();
+		
+		try {
+			productsMap = namedJdbcTemplate.query(sql, resultSet);
+			
+			if (productsMap.isEmpty()) {
+				return Collections.emptyList();
+			} else {
+				productsList = new ArrayList<Product>(productsMap.values());
+				return productsList;
 			}
 			
 		} catch(DataAccessException e) {

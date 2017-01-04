@@ -8,6 +8,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.freshfood.Product;
 import com.freshfood.User;
 import com.freshfood.dao.FreshFoodDao;
 
@@ -28,6 +29,12 @@ public class TestController {
 		
 		for (User user : users) {
 			System.out.println(user.toString());
+		}
+		
+		List<Product> products = freshFoodDao.getProducts();
+		
+		for (Product prod : products) {
+			System.out.println(prod.toString());
 		}
 		return "index";
 	}
