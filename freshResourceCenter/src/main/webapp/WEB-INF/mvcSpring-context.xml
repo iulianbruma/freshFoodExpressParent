@@ -12,11 +12,12 @@
        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 
 	<mvc:annotation-driven />
-	<context:component-scan base-package="com.freshfood.controller" />
+	<context:component-scan base-package="com.freshfood" />
 	<mvc:resources mapping="/static/**" location="/resources/" />
 	
 	<import resource="classpath:freshServicesFacade-context.xml" />
 	<import resource="classpath:/freshFoodContext.xml" />
+	<!-- <import resource="spring-security.xml" /> -->
 	
 	<bean id="templateResolver"
           class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">

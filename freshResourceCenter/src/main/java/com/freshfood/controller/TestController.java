@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.freshfood.Product;
 import com.freshfood.User;
@@ -23,8 +24,24 @@ public class TestController {
 		return "index";
 	}
 	
-	@RequestMapping(value = "/check", method = RequestMethod.GET)
-	public String getUsers(ModelMap model) {
+	@RequestMapping(value = "/admin**", method = RequestMethod.GET)
+	public String adminPage() {
+
+	  return "admin";
+
+	}
+	
+	@RequestMapping(value="/welcom**", method = RequestMethod.GET)
+	public String welcome(ModelMap model){
+		return "index";
+	}
+	
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String getUsers(@RequestParam(value = "error", required = false) String error,
+			 ModelMap model) {
+		if (error != null) {
+			return "403";
+		}
 		List<User> users = freshFoodDao.getUsers();
 		
 		for (User user : users) {
@@ -36,6 +53,17 @@ public class TestController {
 		for (Product prod : products) {
 			System.out.println(prod.toString());
 		}
-		return "index";
+		return "login";
+	}
+	
+	
+	@RequestMapping(value = "/403", method = RequestMethod.POST)
+	public String accesssDenied() {
+
+
+	  //check if user is login
+
+	  return "403";
+
 	}
 }
