@@ -1,0 +1,11 @@
+body {
+	background-image: url('../images/background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.navColor {
+	background-color: #3e0e08 !important;
+	border-color: #080808;
+	color: #f7d7a5 !important;
+}

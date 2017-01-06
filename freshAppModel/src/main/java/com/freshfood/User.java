@@ -7,12 +7,22 @@ public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	private String username;
 	private String firstName;
 	private String lastName;
 	private String email;
 	private Date birthday;
 	private String password;
 	private Date logDate;
+	private String role;
+	
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	
 	public String getFirstName() {
 		return firstName;
@@ -57,10 +67,17 @@ public class User implements Serializable {
 		this.logDate = logDate;
 	}
 	
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 	@Override
 	public String toString() {
-		return "User [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", birthday=" + birthday
-				+ ", password=" + password + ", logDate=" + logDate + "]";
+		return "User [username=" + username + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+				+ ", birthday=" + birthday + ", password=" + password + ", logDate=" + logDate + ", role=" + role + "]";
 	}
-		
 }

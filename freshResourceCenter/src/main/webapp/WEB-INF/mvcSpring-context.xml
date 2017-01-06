@@ -12,6 +12,26 @@
        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 
 	<mvc:annotation-driven />
+	<context:component-scan base-package="com.freshfood" />
+	<mvc:resources mapping="/static/**" location="/resources/" />
+	
 	<import resource="classpath:freshServicesFacade-context.xml" />
+	<import resource="classpath:/freshFoodContext.xml" />
+	<!-- <import resource="spring-security.xml" /> -->
+	
+	<bean id="templateResolver"
+          class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
+        <property name="prefix" value="/WEB-INF/views/" />
+        <property name="suffix" value=".html" />
+        <property name="templateMode" value="HTML5" />
+    </bean>
+
+	<bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
+		<property name="templateResolver" ref="templateResolver" />
+	</bean>
+
+	<bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+		<property name="templateEngine" ref="templateEngine" />
+	</bean>
 	
 </beans>   

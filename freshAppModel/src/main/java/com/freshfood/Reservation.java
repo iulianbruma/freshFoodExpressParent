@@ -2,7 +2,6 @@ package com.freshfood;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.util.List;
 
 public class Reservation implements Serializable {
 
