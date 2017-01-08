@@ -1,15 +1,14 @@
 package com.freshfood.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.freshfood.Product;
 import com.freshfood.User;
 import com.freshfood.dao.FreshFoodDao;
 
@@ -24,7 +23,7 @@ public class TestController {
 		return "index";
 	}
 	
-	@RequestMapping(value = "/admin**", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin**", method = {RequestMethod.GET, RequestMethod.POST})
 	public String adminPage() {
 
 	  return "admin";
@@ -37,25 +36,37 @@ public class TestController {
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String getUsers(@RequestParam(value = "error", required = false) String error,
+	public String loginPage(@RequestParam(value = "error", required = false) String error,
 			 ModelMap model) {
+		
 		if (error != null) {
 			return "403";
 		}
-		List<User> users = freshFoodDao.getUsers();
+		model.addAttribute("user", new User());
 		
-		for (User user : users) {
-			System.out.println(user.toString());
-		}
+		return "login";
+	}
+	
+	@RequestMapping(value = "/registration", method = RequestMethod.POST)
+	public String registrateUser(ModelMap model, User user) {
 		
-		List<Product> products = freshFoodDao.getProducts();
-		
-		for (Product prod : products) {
-			System.out.println(prod.toString());
+		try {
+			freshFoodDao.addUser(user);
+		} catch (DuplicateKeyException e) {
+			throw e;
+		} catch (DataAccessException e) {
+			throw e;
 		}
 		return "login";
 	}
 	
+	@RequestMapping(value = "/pizza", method = RequestMethod.GET)
+	public String getPizza(ModelMap model) {
+		
+		//model.addAttribute("user", new User());
+		
+		return "products";
+	}
 	
 	@RequestMapping(value = "/403", method = RequestMethod.POST)
 	public String accesssDenied() {

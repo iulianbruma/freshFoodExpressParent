@@ -11,11 +11,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import com.freshfood.User;
+import com.freshfood.helper.CustomAuthenticationHelper;
+
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
-	public CustomAuthenticationProvider() {
-		System.out.println("dfg");
-	}
+
+	private CustomAuthenticationHelper customAuthenticationHelper;
 
 	@Override
 	public Authentication authenticate(Authentication auth) throws AuthenticationException {
@@ -25,10 +27,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		String password = auth.getCredentials().toString();
 
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		System.out.println("username = " + username + "; password = " + password);
-		if (password.equals("123456") && username.equals("admin")) {
-			System.out.println("intrat in if");
-			authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		User user = customAuthenticationHelper.checkForUserOnLogin(username, password);
+		
+		if (user != null) {
+			authorities.add(new SimpleGrantedAuthority(user.getRole()));
 			return new UsernamePasswordAuthenticationToken(auth.getName(), auth.getCredentials(), authorities);
 		}
 		return null;
@@ -39,4 +41,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		return auth.equals(UsernamePasswordAuthenticationToken.class);
 	}
 
+	public void setCustomAuthenticationHelper(CustomAuthenticationHelper customAuthenticationHelper) {
+		this.customAuthenticationHelper = customAuthenticationHelper;
+	}
+	
 }

@@ -1,5 +1,7 @@
 package com.freshfood.dao;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,6 +10,8 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import com.freshfood.Product;
@@ -70,6 +74,31 @@ public class FreshFoodDao {
 			}
 			
 		} catch(DataAccessException e) {
+			throw e;
+		}
+	}
+	
+	public void addUser(User user) {
+		String sql = prop.getProperty("addUser");
+		
+		MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+		
+		namedParameters.addValue("username", user.getUsername());
+		namedParameters.addValue("firstname", user.getFirstName());
+		namedParameters.addValue("lastname", user.getLastName());
+		namedParameters.addValue("email", user.getEmail());
+		namedParameters.addValue("birthday", user.getBirthday());
+		namedParameters.addValue("password", user.getPassword());
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate localDate = LocalDate.now();
+		namedParameters.addValue("log_date", dtf.format(localDate));
+		namedParameters.addValue("role", "ROLE_USER");
+		
+		try {
+			namedJdbcTemplate.update(sql, namedParameters);
+		} catch (DuplicateKeyException e) {
+			throw e;
+		} catch (DataAccessException e) {
 			throw e;
 		}
 	}
