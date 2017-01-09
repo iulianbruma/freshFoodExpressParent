@@ -9,7 +9,9 @@ public class Product implements Serializable {
 	private String name;
 	private double price;
 	private int categoryId;
+	private String categoryName;
 	private int subcategoryId;
+	private String subcategoryName;
 	
 	public String getName() {
 		return name;
@@ -42,10 +44,26 @@ public class Product implements Serializable {
 	public void setSubcategoryId(int subcategoryId) {
 		this.subcategoryId = subcategoryId;
 	}
+	
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
+	public String getSubcategoryName() {
+		return subcategoryName;
+	}
+
+	public void setSubcategoryName(String subcategoryName) {
+		this.subcategoryName = subcategoryName;
+	}
 
 	@Override
 	public String toString() {
-		return "Product [name=" + name + ", price=" + price + ", categoryId=" + categoryId + ", subcategoryId="
-				+ subcategoryId + "]";
+		return "Product [name=" + name + ", price=" + price + ", categoryId=" + categoryId + ", categoryName="
+				+ categoryName + ", subcategoryId=" + subcategoryId + ", subcategoryName=" + subcategoryName + "]";
 	}
 }

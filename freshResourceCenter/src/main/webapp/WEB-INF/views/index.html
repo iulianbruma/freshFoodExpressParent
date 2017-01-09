@@ -1,5 +1,6 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 
 <head>
 	<title>Login Page!</title>
@@ -22,10 +23,42 @@
 		<button class="btn btn-info" type="submit" th:text="Press"></button>
 	</form>
 	<div>
-		
+		<div id="map" style="width:100%;height:500px"></div>
 	</div>
 	
 	<footer th:include="layout/footer :: footer" class="footer-distributed"></footer>
+	
+	<script layout:fragment="endScript" th:inline="javascript">
+			
+			document.getElementById('location').onclick = function() {
+			    var div = document.getElementById('map');
+			    if (div.style.display !== 'none') {
+			        div.style.display = 'none';
+			    }
+			    else {
+			        div.style.display = 'block';
+			        myMap();
+			    }
+			};
+			
+			function myMap() {
+				  var myCenter = new google.maps.LatLng(51.508742,-0.120850);
+				  var mapCanvas = document.getElementById("map");
+				  var mapOptions = {center: myCenter, zoom: 5};
+				  var map = new google.maps.Map(mapCanvas, mapOptions);
+				  var marker = new google.maps.Marker({position:myCenter});
+				  marker.setMap(map);
+	
+				  google.maps.event.addListener(marker,'click',function() {
+				    var pos = map.getZoom();
+				    map.setZoom(9);
+				    map.setCenter(marker.getPosition());
+				    window.setTimeout(function() {map.setZoom(pos);},3000);
+				  });
+				}
+		</script>
+		
+		<!-- <script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script> -->
 		
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	

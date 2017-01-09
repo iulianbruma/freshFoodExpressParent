@@ -55,11 +55,10 @@ public class FreshFoodDao {
 		}
 	}
 	
-	public List<Product> getProducts() {
+	public Map<String, List<Product>> getProducts() {
 		String sql = prop.getProperty("getProducts");
-		List<Product> productsList;
 		
-		Map<String, Product> productsMap = new HashMap<>();
+		Map<String, List<Product>> productsMap = new HashMap<>();
 		
 		ProductResultSet resultSet = new ProductResultSet();
 		
@@ -67,10 +66,9 @@ public class FreshFoodDao {
 			productsMap = namedJdbcTemplate.query(sql, resultSet);
 			
 			if (productsMap.isEmpty()) {
-				return Collections.emptyList();
+				return Collections.emptyMap();
 			} else {
-				productsList = new ArrayList<Product>(productsMap.values());
-				return productsList;
+				return productsMap;
 			}
 			
 		} catch(DataAccessException e) {

@@ -13,11 +13,16 @@
 	<context:component-scan base-package="com.freshfood.security" />
     <!-- enable use-expressions -->
 	<sec:http auto-config="true" use-expressions="true" authentication-manager-ref="authenticationManager">
-		<sec:intercept-url pattern="/login" access="permitAll" />
+	
 		<sec:intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')" />
+		<!-- <sec:intercept-url pattern="/pizza**" access="isAuthenticated()"/> -->
+		<sec:intercept-url pattern="/cart**" access="isAuthenticated()"/>
+		<sec:intercept-url pattern="/reservation**" access="isAuthenticated()"/>
+		<sec:intercept-url pattern="/**" access="permitAll" />
+		<sec:intercept-url pattern="/login" access="permitAll" />
 		
 		<!-- access denied page -->
-		<sec:access-denied-handler error-page="/403" />
+		<sec:access-denied-handler error-page="/denied" />
 		<sec:form-login 
 		    login-page="/login" 
 		    default-target-url="/welcom" 
