@@ -1,6 +1,7 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-		xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+		xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 
 <head>
 	<title>Login Page!</title>
@@ -28,7 +29,7 @@
 	            <article class="col-item">
 	            	<div class="photo">
 	        			<div class="options-cart-round">
-	        				<button th:id="${iterationStatus.count}" onClick = "AddToCart(this.id)" class="btn btn-default" title="Add to cart">
+	        				<button sec:authorize="isAuthenticated() and !hasRole('ROLE_ADMIN')" type="submit" th:id="${iterationStatus.count}" onClick = "setId(this.id)" class="btn btn-default" title="Add to cart">
 	        					<span class="fa fa-shopping-cart"></span>
 	        				</button>
 	        				<button class="btn btn-default" title="View Product">
@@ -56,20 +57,60 @@
 	<footer th:include="layout/footer :: footer" class="footer-distributed"></footer>
 		
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
 	
 	<script src="../../resources/js/bootstrap.min.js" th:src="@{/static/js/bootstrap.min.js}"></script>
+	<script src="../../resources/js/navigationBar.js" th:src="@{/static/js/navigationBar.js}"></script>
 	<script layout:fragment="endScript" th:inline="javascript">
-		/* $(function () {
-		 	$('[data-toggle="tooltip"]').tooltip();
-		}); */
-		function AddToCart(id) {
+		
+		function setId(id) {
+			enableSearchButton(false, id);
+			event.preventDefault();
+			addViaAjax(id);
+		}
+		
+		function enableSearchButton(flag, id) {
+			$('#'+id).prop("disabled", flag);
+		}
+		
+		function addViaAjax(id) {
 			var products = /*[[${products}]]*/ 'Products';
-			console.log("Add to cart");
-			console.log(products);
-			console.log(id);
-			console.log(products[id-1]);
-			return products;
-			//console.log(products[id-1]);
+			
+			var jsonProduct = {};
+			jsonProduct["categoryId"] = products[id-1].categoryId;
+			jsonProduct["categoryName"] = products[id-1].categoryName;
+			jsonProduct["subcategoryId"] = products[id-1].subcategoryId;
+			jsonProduct["subcategoryName"] = products[id-1].subcategoryName;
+			jsonProduct["name"] = products[id-1].name;
+			jsonProduct["price"] = products[id-1].price;
+			
+			getAjax(jsonProduct, id);
+		}
+		
+		function getAjax(jsonProduct) {
+			$.ajax({
+				type: "POST",
+				url: "addToCart",
+				contentType : "application/json",
+				data: JSON.stringify(jsonProduct),
+				dataType : 'json',
+				timeout : 100000,
+				async: false,
+				success : function(data){
+					console.log("Success: ", data);
+					console.log(parseFloat(data.totalPrice));
+					$("#cartQuantity").text(' ' + data.totalQuantity);
+					$("#cartTotalPrice").text(data.totalPrice.toFixed(2));
+				},
+				error : function(e) {
+					console.log("ERROR: ", e);
+					display(e);
+				},
+				done : function(e) {
+					console.log("DONE");
+					enableSearchButton(true, id);
+				}
+			});
 		}
 	</script>
 </body>

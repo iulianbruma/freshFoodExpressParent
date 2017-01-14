@@ -15,7 +15,6 @@
 				</div>
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav ">
-						<li><a href="#" th:href="@{/}">Home</a></li>
 						<li><a href="../products" th:href="@{/pizza}">Pizza</a></li>
 						<li><a href="../products" th:href="@{/paste}">Paste</a></li>
 						<li><a href="../products" th:href="@{/garnituri}">Garnituri</a></li>
@@ -36,9 +35,27 @@
 					</form>
 					<ul class="nav navbar-nav navbar-right">
 						<li sec:authorize="isAuthenticated()"><a href="#" th:href="@{/admin}"><span class="glyphicon glyphicon-user"> <b><i sec:authentication="name"></i></b></span> </a></li>
-						<li><a href="#" th:href="@{/reservation}"><span class="glyphicon glyphicon-calendar"></span> Make Reservation</a></li>
+						<li sec:authorize="!hasRole('ROLE_ADMIN')"><a href="#" th:href="@{/reservation}"><span class="glyphicon glyphicon-calendar"></span> Make Reservation</a></li>
 						<li sec:authorize="isAnonymous()"><a href="#" th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-						<li sec:authorize="isAuthenticated() and !hasRole('ROLE_ADMIN')"><a href="#" th:href="@{/cart}"><span class="glyphicon glyphicon-shopping-cart"></span> My Cart</a></li>
+						<li sec:authorize="isAuthenticated() and !hasRole('ROLE_ADMIN')" class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-shopping-cart"> </span><span id="cartQuantity" th:text="' ' + ${quantity}"></span><span> - Items | </span><span id="cartTotalPrice" th:text="${totalPrice}"></span><span> lei</span><b class="caret"></b></a>
+							<ul class="dropdown-menu dropMenu">
+								<li th:each="product, iterationStatus : ${cartProducts}">
+									<span class="item">
+										<span class="item-info">
+											<img th:src="@{/static/images/} + ${#strings.toLowerCase(product.categoryName)} + '/' + ${product.name} + '.jpg'" style="width:100px;" alt="" />
+										</span>
+				                        <span class="item-info" th:with="result=${product.price * product.quantity}">
+				                        	<span th:text="'Item: ' + ${product.name} + '; '">Item name</span>
+				                            <span th:text="'Qty: ' + ${product.quantity} + '; '">23</span>
+				                            <span th:text="'Price: ' + ${result} + 'lei'">23$</span>
+				                        </span>
+					                </span>
+								</li>
+								<li class="divider"></li>
+								<li><a href="#" th:href="@{/cart}" class="btn btn-warning">View Cart</a></li>
+							</ul>
+				        </li>
 						<li sec:authorize="hasRole('ROLE_ADMIN')"><a href="#" th:href="@{/admin}"><span class="glyphicon glyphicon-lock"></span> Admin Panel</a></li>
 						<li sec:authorize="isAuthenticated()"><a href="#" th:href="@{j_spring_security_logout}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 					</ul>

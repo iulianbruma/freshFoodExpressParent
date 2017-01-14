@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -23,6 +24,10 @@ public class FreshFoodDao {
 	
 	private NamedParameterJdbcTemplate namedJdbcTemplate;
 	private Properties prop;
+	
+	public FreshFoodDao () {
+		
+	}
 	
 	public FreshFoodDao (NamedParameterJdbcTemplate namedJdbcTemplate) {
 		this.namedJdbcTemplate = namedJdbcTemplate;
@@ -55,6 +60,7 @@ public class FreshFoodDao {
 		}
 	}
 	
+	@Cacheable(value="allProducts", key="#root.method.name")
 	public Map<String, List<Product>> getProducts() {
 		String sql = prop.getProperty("getProducts");
 		

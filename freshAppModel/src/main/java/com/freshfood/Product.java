@@ -2,16 +2,20 @@ package com.freshfood;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 public class Product implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	private String name;
-	private double price;
+	private float price;
 	private int categoryId;
 	private String categoryName;
 	private int subcategoryId;
 	private String subcategoryName;
+	private String description;
 	
 	public String getName() {
 		return name;
@@ -21,11 +25,11 @@ public class Product implements Serializable {
 		this.name = name;
 	}
 	
-	public double getPrice() {
+	public float getPrice() {
 		return price;
 	}
 	
-	public void setPrice(double price) {
+	public void setPrice(float price) {
 		this.price = price;
 	}
 	
@@ -60,10 +64,52 @@ public class Product implements Serializable {
 	public void setSubcategoryName(String subcategoryName) {
 		this.subcategoryName = subcategoryName;
 	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	@Override
 	public String toString() {
 		return "Product [name=" + name + ", price=" + price + ", categoryId=" + categoryId + ", categoryName="
 				+ categoryName + ", subcategoryId=" + subcategoryId + ", subcategoryName=" + subcategoryName + "]";
+	}
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+				.append(this.categoryId)
+				.append(this.categoryName)
+				.append(this.subcategoryId)
+				.append(this.subcategoryName)
+				.append(this.price)
+				.append(this.name)
+				.toHashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Product == false) {
+			return false;
+		}
+		
+		if (this == obj) {
+			return true;
+		}
+		
+		final Product otherObject = (Product) obj;
+		
+		return new EqualsBuilder()
+				.append(this.categoryId, otherObject.categoryId)
+				.append(this.categoryName, otherObject.categoryName)
+				.append(this.subcategoryId, otherObject.subcategoryId)
+				.append(this.subcategoryName, otherObject.subcategoryName)
+				.append(this.price, otherObject.price)
+				.append(this.name, otherObject.name)
+				.isEquals();
 	}
 }

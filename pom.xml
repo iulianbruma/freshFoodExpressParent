@@ -12,6 +12,7 @@
   
   <properties>
   	<spring.version>3.2.8.RELEASE</spring.version>
+  	<ehcache.version>2.7.4</ehcache.version>
   </properties>
   
   <dependencyManagement>
@@ -53,6 +54,12 @@
 		    <artifactId>spring-context</artifactId>
 		    <version>${spring.version}</version>
 		</dependency>
+		
+		<dependency>
+	    	<groupId>net.sf.ehcache</groupId>
+	    	<artifactId>ehcache</artifactId>
+	    	<version>${ehcache.version}</version>
+	    </dependency>
 		
 		<!-- Test Dependencies -->
 		

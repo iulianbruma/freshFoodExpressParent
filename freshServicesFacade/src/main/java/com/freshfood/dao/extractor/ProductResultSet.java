@@ -22,7 +22,7 @@ public class ProductResultSet implements ResultSetExtractor<Map<String, List<Pro
 			
 			Product product = new Product();
 			product.setName(rs.getString("product_name"));
-			product.setPrice(rs.getDouble("price"));
+			product.setPrice(rs.getFloat("price"));
 			product.setCategoryId(rs.getInt("category_id"));
 			product.setCategoryName(rs.getString("category_name"));
 			product.setSubcategoryId(rs.getInt("subcategory_id"));

@@ -1,20 +1,28 @@
 package com.freshfood.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.freshfood.Product;
 import com.freshfood.User;
 import com.freshfood.dao.FreshFoodDao;
+import com.freshfood.helper.CartHelper;
+import com.freshfood.ui.CartView;
+import com.freshfood.ui.ProductView;
+import com.freshfood.ui.converter.ProductToProductView;
 
 @Controller
 public class TestController {
@@ -22,15 +30,18 @@ public class TestController {
 	@Autowired
 	private FreshFoodDao freshFoodDao;
 	
+	@Autowired
+	private CartHelper cartHelper;
+	
+	@Autowired
+	private ProductToProductView productToProductView;
+	
 	@RequestMapping(value="/", method = RequestMethod.GET)
 	public String index(ModelMap model){
 		
-		Map<String, List<Product>> products = freshFoodDao.getProducts();
-		List<Product> productsList = products.get("Pizza");
-		for (Product product : productsList) {
-			System.out.println(product);
-		}
-		
+		model.addAttribute("quantity", cartHelper.getCartQuantity());
+		model.addAttribute("totalPrice", cartHelper.getCartTotalPrice());
+		model.addAttribute("cartProducts", getCartProducts());
 		return "index";
 	}
 	
@@ -43,6 +54,8 @@ public class TestController {
 	
 	@RequestMapping(value="/welcom**", method = RequestMethod.GET)
 	public String welcome(ModelMap model){
+		model.addAttribute("quantity", cartHelper.getCartQuantity());
+		model.addAttribute("totalPrice", cartHelper.getCartTotalPrice());
 		return "index";
 	}
 	
@@ -53,6 +66,8 @@ public class TestController {
 		if (error != null) {
 			return "403";
 		}
+		model.addAttribute("quantity", cartHelper.getCartQuantity());
+		model.addAttribute("totalPrice", cartHelper.getCartTotalPrice());
 		model.addAttribute("user", new User());
 		
 		return "login";
@@ -68,6 +83,8 @@ public class TestController {
 		} catch (DataAccessException e) {
 			throw e;
 		}
+		model.addAttribute("quantity", cartHelper.getCartQuantity());
+		model.addAttribute("totalPrice", cartHelper.getCartTotalPrice());
 		return "login";
 	}
 	
@@ -76,8 +93,11 @@ public class TestController {
 		
 		Map<String, List<Product>> products = freshFoodDao.getProducts();
 		
+		model.addAttribute("quantity", cartHelper.getCartQuantity());
+		model.addAttribute("totalPrice", cartHelper.getCartTotalPrice());
 		model.addAttribute("title", "Pizza");
 		model.addAttribute("products", products.get("Pizza"));
+		model.addAttribute("cartProducts", getCartProducts());
 		return "products";
 	}
 	
@@ -86,8 +106,11 @@ public class TestController {
 		
 		Map<String, List<Product>> products = freshFoodDao.getProducts();
 		
+		model.addAttribute("quantity", cartHelper.getCartQuantity());
+		model.addAttribute("totalPrice", cartHelper.getCartTotalPrice());
 		model.addAttribute("title", "Paste");
 		model.addAttribute("products", products.get("Paste"));
+		model.addAttribute("cartProducts", getCartProducts());
 		return "products";
 	}
 	
@@ -96,16 +119,50 @@ public class TestController {
 		
 		Map<String, List<Product>> products = freshFoodDao.getProducts();
 		
+		model.addAttribute("quantity", cartHelper.getCartQuantity());
+		model.addAttribute("totalPrice", cartHelper.getCartTotalPrice());
 		model.addAttribute("title", "Garnituri");
 		model.addAttribute("products", products.get("Garnituri"));
+		model.addAttribute("cartProducts", getCartProducts());
 		return "products";
 	}
 	
+	@RequestMapping(value = "/cart", method = RequestMethod.GET)
+	public String getCart(ModelMap model) {
+		model.addAttribute("quantity", cartHelper.getCartQuantity());
+		model.addAttribute("totalPrice", cartHelper.getCartTotalPrice());
+		model.addAttribute("cartProducts", getCartProducts());
+		return "cart";
+	}
+	
+	@RequestMapping(value = "/submitOrder", method = RequestMethod.GET)
+	public String orderSubmit() {
+		cartHelper.clearCartCache();
+		
+	  return "orderSubmit";
+	}
+	
+	@RequestMapping(value = "/addToCart", method = RequestMethod.POST)
+	@ResponseBody
+	public CartView addProductToCart(@RequestBody Product product) {
+		
+		ProductView productView = productToProductView.convert(product);
+		cartHelper.addToCartCacheProducts(productView);
+		Map<ProductView, Integer> map = cartHelper.getCachedProducts();
+		
+		System.out.println("<******************Cache nou***************>");
+		for (Map.Entry<ProductView, Integer> product1: map.entrySet()) {
+			System.out.println(product1.getKey().toString());
+			System.out.println(product1.getValue());
+		}
+		
+		CartView cartView = new CartView(cartHelper.getCartQuantity(), cartHelper.getCartTotalPrice());
+		return cartView;
+	}
+	
+	
 	@RequestMapping(value = "/403", method = RequestMethod.GET)
 	public String loginError() {
-
-
-	  //check if user is login
 
 	  return "403";
 	}
@@ -113,9 +170,14 @@ public class TestController {
 	@RequestMapping(value = "/denied", method = RequestMethod.GET)
 	public String accesssDenied() {
 
-
-	  //check if user is login
-
 	  return "denied";
+	}
+	
+	private List<ProductView> getCartProducts() {
+		Set<ProductView> set = cartHelper.getCachedProducts().keySet();
+		List<ProductView> list = new ArrayList<>();
+		list.addAll(set);
+		
+		return list;
 	}
 }

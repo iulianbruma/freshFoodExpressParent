@@ -1,0 +1,87 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+
+<head>
+	<title>Login Page!</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="../../resources/css/bootstrap.min.css" th:href="@{/static/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/default.css" th:href="@{/static/css/default.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/navigationBar.css" th:href="@{/static/css/navigationBar.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/footer.css" th:href="@{/static/css/footer.css}"/>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+	<link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
+	<style>
+		
+	</style>
+</head>
+
+<body>
+	<nav th:include="layout/navigationBar :: navigation" class="navbar navbar-inverse"></nav>
+	
+	<div class="container">
+	    <div class="row">
+	        <div class="col-sm-12 col-md-10 col-md-offset-1">
+	            <table class="table table-hover" style="background-color: rgba(215,159,92,1);">
+	                <thead>
+	                    <tr>
+	                        <th class="text-center"> Product</th>
+	                        <th class="text-center">Quantity</th>
+	                        <th class="text-center">Price</th>
+	                        <th class="text-center">Total</th>
+	                        <th class="text-center">Remove</th>
+	                    </tr>
+	                </thead>
+	                <tbody>
+	                    <tr th:each="product, iterationStatus : ${cartProducts}">
+	                        <td class="col-sm-8 col-md-6">
+	                        <div class="media">
+	                            <a class="thumbnail pull-left" href="#"> <img class="media-object" src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png" style="width: 72px; height: 72px;"> </a>
+	                            <div class="media-body">
+	                                <h4 class="media-heading"><a href="#" th:text="${product.name}">Product name</a></h4>
+	                                <h5 class="media-heading"> by <a href="#">Brand name</a></h5>
+	                                <span>Description: </span><span class="text-success">sos alb, mozarella, bacon, ou, parmezan</span>
+	                            </div>
+	                        </div></td>
+	                        <td class="col-sm-1 col-md-1" style="text-align: center">
+	                        	<input type="email" class="form-control" id="exampleInputEmail1" th:value="${product.quantity}">
+	                        </td>
+	                        <td class="col-sm-1 col-md-1 text-center"><strong th:text="${product.price}">$4.87</strong></td>
+	                        <td class="col-sm-1 col-md-1 text-center" th:with="result=${product.price * product.quantity}"><strong th:text="${result}">$14.61</strong></td>
+	                        <td class="col-sm-1 col-md-1">
+		                        <button type="button" class="btn btn-danger">
+		                            <span class="glyphicon glyphicon-remove"></span> Remove
+		                        </button>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td colspan=5 class="text-right"><h3><strong th:text="'Total: ' + ${totalPrice}">$31.53</strong></h3></td>
+	                    </tr>
+	                    <tr>
+	                        <td colspan=5 class="text-right">
+	                        	<a href="#" th:href="@{/}" class="btn btn-warning" role="button">
+		                            <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
+		                        </a>
+		                        <a href="#" th:href="@{/submitOrder}" th:if="!${#lists.isEmpty(cartProducts)}" role="button" class="btn btn-success">
+		                            Checkout <span class="glyphicon glyphicon-play"></span>
+		                        </a>
+	                       	</td>
+	                    </tr>
+	                </tbody>
+	            </table>
+	        </div>
+	    </div>
+	</div>
+	
+	<footer th:include="layout/footer :: footer" class="footer-distributed"></footer>
+	
+	<script layout:fragment="endScript" th:inline="javascript">
+	
+	</script>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="../../resources/js/bootstrap.min.js" th:src="@{/static/js/bootstrap.min.js}"></script>
+	<script src="../../resources/js/navigationBar.js" th:src="@{/static/js/navigationBar.js}"></script>
+</body>
+
+</html>
