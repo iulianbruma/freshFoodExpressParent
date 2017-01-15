@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.freshfood.Product;
+import com.freshfood.Reservation;
 import com.freshfood.User;
 import com.freshfood.dao.FreshFoodDao;
 import com.freshfood.helper.CartHelper;
@@ -133,6 +135,13 @@ public class TestController {
 		model.addAttribute("totalPrice", cartHelper.getCartTotalPrice());
 		model.addAttribute("cartProducts", getCartProducts());
 		return "cart";
+	}
+	
+	@RequestMapping(value = "/reservation", method = RequestMethod.GET)
+	public String reserve(Model model) {
+		System.out.println("intrat");
+		model.addAttribute("reservation", new Reservation());
+	  return "reservation";
 	}
 	
 	@RequestMapping(value = "/submitOrder", method = RequestMethod.GET)

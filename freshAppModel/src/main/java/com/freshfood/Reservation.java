@@ -7,19 +7,19 @@ public class Reservation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private User owner;
+	private String username;
 	private int numberOfPeople;
 	private Date dateTime;
 	private Order order;
 	
-	public User getOwner() {
-		return owner;
+	public String getUsername() {
+		return username;
 	}
-	
-	public void setOwner(User owner) {
-		this.owner = owner;
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
-	
+
 	public int getNumberOfPeople() {
 		return numberOfPeople;
 	}
@@ -42,10 +42,11 @@ public class Reservation implements Serializable {
 	public void setOrder(Order order) {
 		this.order = order;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Reservation [owner=" + owner + ", numberOfPeople=" + numberOfPeople + ", dateTime=" + dateTime + "]";
+		return "Reservation [username=" + username + ", numberOfPeople=" + numberOfPeople + ", dateTime=" + dateTime
+				+ ", order=" + order + "]";
 	}
-
+	
 }
