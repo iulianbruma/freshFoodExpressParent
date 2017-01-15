@@ -9,40 +9,34 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 	
 	<import resource="classpath:freshServicesFacade-context.xml" />
+	<import resource="classpath:freshFoodContext.xml" />
 	<context:component-scan base-package="com.freshfood.security" />
     <!-- enable use-expressions -->
 	<sec:http auto-config="true" use-expressions="true" authentication-manager-ref="authenticationManager">
-		<sec:intercept-url pattern="/login" access="permitAll" />
+	
 		<sec:intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')" />
+		<!-- <sec:intercept-url pattern="/pizza**" access="isAuthenticated()"/> -->
+		<sec:intercept-url pattern="/cart**" access="isAuthenticated()"/>
+		<sec:intercept-url pattern="/reservation**" access="isAuthenticated()"/>
+		<sec:intercept-url pattern="/**" access="permitAll" />
+		<sec:intercept-url pattern="/login" access="permitAll" />
 		
 		<!-- access denied page -->
-		<sec:access-denied-handler error-page="/403" />
+		<sec:access-denied-handler error-page="/denied" />
 		<sec:form-login 
 		    login-page="/login" 
 		    default-target-url="/welcom" 
 		    authentication-failure-url="/login?error" />
 		    
 		<sec:logout logout-success-url="/"  />
-		<!-- enable csrf protection nu am idee...poate maine vine inspiratia-->
-		<!-- <sec:csrf disabled = "true"/> -->
 	</sec:http>
 	
 	<!-- Select users and user_roles from database -->
 	<sec:authentication-manager alias="authenticationManager">
 		<sec:authentication-provider ref="customAuthenticationProvider"/>
-		<!-- <sec:authentication-provider>
-			<sec:jdbc-user-service data-source-ref="dataSource"
-				users-by-username-query=
-					"select username,password from user where username=?"
-				authorities-by-username-query=
-					"select username, role from user where username =?  " />
-			<sec:user-service>
-				<sec:user name="admin" password="123456" authorities="ROLE_ADMIN"/>
-			</sec:user-service>
-		</sec:authentication-provider> -->
 	</sec:authentication-manager>
 	
 	<bean id="customAuthenticationProvider" class="com.freshfood.security.CustomAuthenticationProvider">
-		
+		<property name="customAuthenticationHelper" ref="customAuthenticationHelper"/>
 	</bean>
 </beans>

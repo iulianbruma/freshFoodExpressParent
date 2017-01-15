@@ -6,6 +6,7 @@
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:cache="http://www.springframework.org/schema/cache"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/mvc
 		http://www.springframework.org/schema/mvc/spring-mvc.xsd
@@ -14,11 +15,16 @@
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/util  
-		http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+		http://www.springframework.org/schema/util/spring-util-3.1.xsd
+		http://www.springframework.org/schema/cache 
+		http://www.springframework.org/schema/cache/spring-cache.xsd">
 		
 	<context:property-placeholder location="classpath:/database.properties" />
 	<util:properties id="properties"
 		location="classpath:/sqlStatements.properties" />
+	
+	<cache:annotation-driven key-generator="enhancedDefaultKeyGenerator"/>
+    <bean id ="enhancedDefaultKeyGenerator" class="com.freshfood.cache.key.EnhancedDefaultKeyGenerator"/>
 		
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -37,5 +43,24 @@
 		<constructor-arg ref="jdbcTemplate"/>
 		<property name="prop" ref="properties" />
 	</bean>
-
+	
+	<bean id="cartHelper" class="com.freshfood.helper.CartHelper" />
+	
+	<bean id="productToProductView" class="com.freshfood.ui.converter.ProductToProductView"/>
+		
+	<!-- <bean id="cache" class="org.springframework.cache.Cache" />
+	
+	<bean id="cacheFacade" class="com.freshfood.cache.CacheFood">
+		<constructor-arg ref="cache" />
+	</bean>
+	
+	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+	    <property name="caches">
+	      <set>
+	        <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
+	        	<property name="products"/>
+	        </bean>
+	      </set>
+	    </property>
+	  </bean> -->
 </beans>

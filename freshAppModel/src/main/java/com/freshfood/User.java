@@ -11,7 +11,7 @@ public class User implements Serializable {
 	private String firstName;
 	private String lastName;
 	private String email;
-	private Date birthday;
+	private String birthday;
 	private String password;
 	private Date logDate;
 	private String role;
@@ -46,10 +46,10 @@ public class User implements Serializable {
 		this.email = email;
 	}
 	
-	public Date getBirthday() {
+	public String getBirthday() {
 		return birthday;
 	}
-	public void setBirthday(Date birthday) {
+	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
 	
