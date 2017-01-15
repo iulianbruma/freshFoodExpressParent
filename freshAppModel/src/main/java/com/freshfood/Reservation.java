@@ -1,7 +1,6 @@
 package com.freshfood;
 
 import java.io.Serializable;
-import java.sql.Date;
 
 public class Reservation implements Serializable {
 
@@ -9,7 +8,7 @@ public class Reservation implements Serializable {
 	
 	private String username;
 	private int numberOfPeople;
-	private Date dateTime;
+	private String dateTime;
 	private Order order;
 	
 	public String getUsername() {
@@ -28,13 +27,14 @@ public class Reservation implements Serializable {
 		this.numberOfPeople = numberOfPeople;
 	}
 	
-	public Date getDateTime() {
+	public String getDateTime() {
 		return dateTime;
 	}
-	public void setDateTime(Date dateTime) {
+
+	public void setDateTime(String dateTime) {
 		this.dateTime = dateTime;
 	}
-	
+
 	public Order getOrder() {
 		return order;
 	}

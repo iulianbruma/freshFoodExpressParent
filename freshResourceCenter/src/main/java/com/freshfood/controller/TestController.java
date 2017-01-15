@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -138,10 +139,26 @@ public class TestController {
 	}
 	
 	@RequestMapping(value = "/reservation", method = RequestMethod.GET)
-	public String reserve(Model model) {
-		System.out.println("intrat");
+	public String reservationPage(Model model) {
 		model.addAttribute("reservation", new Reservation());
+		model.addAttribute("quantity", cartHelper.getCartQuantity());
+		model.addAttribute("totalPrice", cartHelper.getCartTotalPrice());
 	  return "reservation";
+	}
+	
+	@RequestMapping(value = "/addReservation", method = RequestMethod.POST)
+	public String resere(ModelMap model, Reservation reservation, Authentication authentication) {
+		
+		try {
+			reservation.setUsername(authentication.getName());
+		} catch (DuplicateKeyException e) {
+			throw e;
+		} catch (DataAccessException e) {
+			throw e;
+		}
+		model.addAttribute("quantity", cartHelper.getCartQuantity());
+		model.addAttribute("totalPrice", cartHelper.getCartTotalPrice());
+		return "orderSubmit";
 	}
 	
 	@RequestMapping(value = "/submitOrder", method = RequestMethod.GET)

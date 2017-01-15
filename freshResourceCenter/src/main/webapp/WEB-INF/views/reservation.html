@@ -1,5 +1,6 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 
 <head>
 	<title>Login Page!</title>
@@ -19,22 +20,26 @@
 	<div class="login-wrap">
 		<div class="login-html">
 			<input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Reservation</label>
+			<input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab"></label>
 			<div class="login-form">
-				<form method="post" action="j_spring_security_check" th:action="@{j_spring_security_check}">
+				<form method="post" action="#" th:action="@{/addReservation}" th:object="${reservation}">
 					<div class="sign-in-htm" style="margin-top:85px;">
 						<div class="group">
-							<label for="user" class="label">Number of people</label>
-							<input id="user" name="j_username" type="text" class="input">
+							<label for="user" class="label">Number of People</label>
+							<input id="user" type="text" class="input" th:field="*{numberOfPeople}" required="required">
 						</div>
 						<div class="group">
 							<label for="date" class="label">Date</label>
-							<input id="date" type="date" class="input" required="required" th:field="*{birthday}">
+							<input id="date" type="date" class="input" required="required" th:field="*{dateTime}">
 						</div>
+						<div class="hr-signUp" style="margin-top: 60px; margin-bottom: 40px;"></div>
 						<div class="group">
 							<button type="submit" class="button" value="Sign In">Reserve</button>
 						</div>
+						<input sec:authentication="name" hidden="hidden" th:field="*{username}">
 					</div>
 				</form>
+				
 			</div>
 		</div>
 	</div>
