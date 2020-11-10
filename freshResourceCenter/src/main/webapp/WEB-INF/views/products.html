@@ -1,0 +1,118 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+	<title>Login Page!</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="../../resources/css/bootstrap.min.css" th:href="@{/static/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/default.css" th:href="@{/static/css/default.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/navigationBar.css" th:href="@{/static/css/navigationBar.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/footer.css" th:href="@{/static/css/footer.css}"/>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+	<link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="../../resources/css/products.css" th:href="@{/static/css/products.css}"/>
+	<style>
+		
+	</style>
+</head>
+
+<body>
+	<nav th:include="layout/navigationBar :: navigation" class="navbar navbar-inverse"></nav>
+	<div class="col-lg-12 container" style="height: 100px; text-align:center; color: white;">
+		<p th:text="${title}" style="font-family: monospace; font-size: 3em;">Pizza</p>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" th:each="product, iterationStatus : ${products}">
+	            <article class="col-item">
+	            	<div class="photo">
+	        			<div class="options-cart-round">
+	        				<button sec:authorize="isAuthenticated() and !hasRole('ROLE_ADMIN')" type="submit" th:id="${iterationStatus.count}" onClick = "setId(this.id)" class="btn btn-default" title="Add to cart">
+	        					<span class="fa fa-shopping-cart"></span>
+	        				</button>
+	        				<button class="btn btn-default" title="View Product">
+	        					<span class="fa fa-info-circle" aria-hidden="true"></span>
+	        				</button>
+	        			</div>
+	        			<a href="#"> <img th:src="@{/static/images/} + ${#strings.toLowerCase(title)} + '/' + ${product.name} + '.jpg'" class="img-responsive" alt="Product Image" /> </a>
+	        		</div>
+	        		<div class="info">
+	        			<div class="row">
+	        				<div class="price-details col-md-6">
+	        					<p class="details">
+	        						<b th:text="${product.name}">Pizza Carbonara</b><br>
+	        						<i>sos alb, mozarella, bacon, ou, parmezan</i>
+	        					</p>
+	        					<span class="price-new" th:text="${product.price} + ' lei'">24,00 lei</span>
+	        				</div>
+	        			</div>
+	        		</div>
+	        	</article>
+	        </div>
+		</div>
+	</div>
+	
+	<footer th:include="layout/footer :: footer" class="footer-distributed"></footer>
+		
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+	
+	<script src="../../resources/js/bootstrap.min.js" th:src="@{/static/js/bootstrap.min.js}"></script>
+	<script src="../../resources/js/navigationBar.js" th:src="@{/static/js/navigationBar.js}"></script>
+	<script layout:fragment="endScript" th:inline="javascript">
+		
+		function setId(id) {
+			enableSearchButton(false, id);
+			event.preventDefault();
+			addViaAjax(id);
+		}
+		
+		function enableSearchButton(flag, id) {
+			$('#'+id).prop("disabled", flag);
+		}
+		
+		function addViaAjax(id) {
+			var products = /*[[${products}]]*/ 'Products';
+			
+			var jsonProduct = {};
+			jsonProduct["categoryId"] = products[id-1].categoryId;
+			jsonProduct["categoryName"] = products[id-1].categoryName;
+			jsonProduct["subcategoryId"] = products[id-1].subcategoryId;
+			jsonProduct["subcategoryName"] = products[id-1].subcategoryName;
+			jsonProduct["name"] = products[id-1].name;
+			jsonProduct["price"] = products[id-1].price;
+			
+			getAjax(jsonProduct, id);
+		}
+		
+		function getAjax(jsonProduct) {
+			$.ajax({
+				type: "POST",
+				url: "addToCart",
+				contentType : "application/json",
+				data: JSON.stringify(jsonProduct),
+				dataType : 'json',
+				timeout : 100000,
+				async: false,
+				success : function(data){
+					console.log("Success: ", data);
+					console.log(parseFloat(data.totalPrice));
+					$("#cartQuantity").text(' ' + data.totalQuantity);
+					$("#cartTotalPrice").text(data.totalPrice.toFixed(2));
+				},
+				error : function(e) {
+					console.log("ERROR: ", e);
+					display(e);
+				},
+				done : function(e) {
+					console.log("DONE");
+					enableSearchButton(true, id);
+				}
+			});
+		}
+	</script>
+</body>
+
+</html>

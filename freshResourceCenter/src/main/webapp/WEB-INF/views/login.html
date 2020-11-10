@@ -1,0 +1,96 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Login Page!</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="../../resources/css/bootstrap.min.css" th:href="@{/static/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/default.css" th:href="@{/static/css/default.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/login.css" th:href="@{/static/css/login.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/navigationBar.css" th:href="@{/static/css/navigationBar.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/footer.css" th:href="@{/static/css/footer.css}"/>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+	<link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
+</head>
+
+<body>	
+	<nav th:include="layout/navigationBar :: navigation" class="navbar navbar-inverse"></nav>
+	
+	<div class="login-wrap">
+		<div class="login-html">
+			<input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
+			<input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
+			<div class="login-form">
+				<form method="post" action="j_spring_security_check" th:action="@{j_spring_security_check}">
+					<div class="sign-in-htm" style="margin-top:85px;">
+						<div class="group">
+							<label for="user" class="label">Username</label>
+							<input id="user" name="j_username" type="text" class="input">
+						</div>
+						<div class="group">
+							<label for="pass" class="label">Password</label>
+							<input id="pass" name="j_password" type="password" class="input" data-type="password">
+						</div>
+						<div class="group">
+							<input id="check" type="checkbox" class="check" checked>
+							<label for="check"><span class="icon"></span> Keep me Signed in</label>
+						</div>
+						<div class="group">
+							<button type="submit" class="button" value="Sign In">Sign In</button>
+						</div>
+						<div class="hr-signIn"></div>
+						<div class="foot-lnk">
+							<a href="#forgot">Forgot Password?</a>
+						</div>
+					</div>
+				</form>
+				<form method="post" action="#" th:action="@{/registration}" th:object="${user}">
+					<div class="sign-up-htm">
+						<div class="group col-lg-12">
+							<label for="user" class="label">Username</label>
+							<input id="user" type="text" class="input" th:field="*{username}" required="required">
+						</div>
+						<div class="group col-lg-6">
+							<label for="firstname" class="label">First Name</label>
+							<input id="firstname" type="text" class="input" th:field="*{firstName}" required="required">
+						</div>
+						<div class="group col-lg-6">
+							<label for="lastname" class="label">Last Name</label>
+							<input id="lastname" type="text" class="input" th:field="*{lastName}" required="required">
+						</div>
+						<div class="group col-lg-6">
+							<label for="pass" class="label">Password</label>
+							<input id="pass" type="password" class="input" data-type="password" th:field="*{password}" required="required">
+						</div>
+						<div class="group col-lg-6">
+							<label for="pass" class="label">Repeat Password</label>
+							<input id="pass" type="password" class="input" data-type="password" required="required">
+						</div>
+						<div class="group col-lg-12">
+							<label for="pass" class="label">Email Address</label>
+							<input id="pass" type="email" class="input" required="required" th:field="*{email}">
+						</div>
+						<div class="group col-lg-12">
+							<label for="date" class="label">Birthday Date</label>
+							<input id="date" type="date" class="input" required="required" th:field="*{birthday}">
+						</div>
+						<div class="group">
+							<button type="submit" class="button" value="Sign Up">Sign Up</button>
+						</div>
+						<div class="hr-signUp" style="margin: 0;"></div>
+						<div class="foot-lnk">
+							<label for="tab-1">Already Member?</label>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<footer th:include="layout/footer :: footer" class="footer-distributed"></footer>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	
+	<script src="../../resources/js/bootstrap.min.js" th:src="@{/static/js/bootstrap.min.js}"></script>
+	<script src="../../resources/js/navigationBar.js" th:src="@{/static/js/navigationBar.js}"></script>
+</body>	

@@ -1,0 +1,53 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+	<title>Login Page!</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="../../resources/css/bootstrap.min.css" th:href="@{/static/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/default.css" th:href="@{/static/css/default.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/login.css" th:href="@{/static/css/login.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/navigationBar.css" th:href="@{/static/css/navigationBar.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/footer.css" th:href="@{/static/css/footer.css}"/>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+	<link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
+</head>
+
+<body>	
+	<nav th:include="layout/navigationBar :: navigation" class="navbar navbar-inverse"></nav>
+	
+	<div class="login-wrap">
+		<div class="login-html">
+			<input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Reservation</label>
+			<input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab"></label>
+			<div class="login-form">
+				<form method="post" action="#" th:action="@{/addReservation}" th:object="${reservation}">
+					<div class="sign-in-htm" style="margin-top:85px;">
+						<div class="group">
+							<label for="user" class="label">Number of People</label>
+							<input id="user" type="text" class="input" th:field="*{numberOfPeople}" required="required">
+						</div>
+						<div class="group">
+							<label for="date" class="label">Date</label>
+							<input id="date" type="date" class="input" required="required" th:field="*{dateTime}">
+						</div>
+						<div class="hr-signUp" style="margin-top: 60px; margin-bottom: 40px;"></div>
+						<div class="group">
+							<button type="submit" class="button" value="Sign In">Reserve</button>
+						</div>
+						<input sec:authentication="name" hidden="hidden" th:field="*{username}">
+					</div>
+				</form>
+				
+			</div>
+		</div>
+	</div>
+	
+	<footer th:include="layout/footer :: footer" class="footer-distributed"></footer>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	
+	<script src="../../resources/js/bootstrap.min.js" th:src="@{/static/js/bootstrap.min.js}"></script>
+	<script src="../../resources/js/navigationBar.js" th:src="@{/static/js/navigationBar.js}"></script>
+</body>	
